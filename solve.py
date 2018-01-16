@@ -1,6 +1,7 @@
 from math import *
 
 import pol
+from strip import *
 
 def bisec(coef, prec, limit):
     max = 100
@@ -8,10 +9,13 @@ def bisec(coef, prec, limit):
     x1 = 0
     x2 = 1
     xm = float()
+    to_strip = prec
+    display = "x = "
 
     while 1:
         xm = (x1 + x2) / 2
-        print(("x = %.*f" % (prec, xm)).rstrip('0'))
+        display, to_strip = stripn0("x = %.*f" % (prec, xm), to_strip)
+        print(display)
         if abs(pol.compute(coef, xm)) < limit:
             return 1
         if pol.compute(coef, x1) * pol.compute(coef, xm) < 0:
@@ -28,11 +32,14 @@ def newton(coef, prec, limit):
     derived = pol.derive(coef)
     xn = 0.5
     xn1 = float()
+    to_strip = prec
+    display = "x = "
 
     print("x = 0.5")
     while 1:
         xn1 = xn - pol.compute(coef, xn) / pol.compute(derived, xn)
-        print(("x = %.*f" % (prec, xn1)).rstrip('0'))
+        display, to_strip = stripn0("x = %.*f" % (prec, xn1), to_strip)
+        print(display)
         if abs(pol.compute(coef, xn1)) < limit:
             return 1
         if iter > max:
@@ -46,10 +53,13 @@ def secant(coef, prec, limit):
     xn_1 = 0
     xn = 1
     xn1 = 0
+    to_strip = prec
+    display = "x = "
 
     while 1:
-        xn1 = xn - (pol.compute(coef, xn) * (xn - xn_1)) / (pol.compute(coef, xn) - pol.compute(coef, xn_1))
-        print(("x = %.*f" % (prec, xn1)).rstrip('0'))
+        xn1 = xn - (pol.compute(coef, xn) * (xn - xn_1))                                          / (pol.compute(coef, xn) - pol.compute(coef, xn_1))
+        display, to_strip = stripn0("x = %.*f" % (prec, xn1), to_strip)
+        print(display)
         if abs(pol.compute(coef, xn1)) < limit:
             return 1
         if iter > max:
